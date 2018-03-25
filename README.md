@@ -22,9 +22,9 @@ PIR motion detector sensor with Arduino nano in ultimate power saving mode
   SLEEP_MODE_PWR_DOWN - the highest power saving mode
   "The Power-down mode saves the register contents but freezes the Oscillator, disabling all other chip functions 
   until the next interrupt or hardware reset."  text from ATMEGA328P datasheet
- `
+ .`
  ### attachInterrupt(A, B, C)
-`.
+`<
     A   can be either 0 or 1 for interrupts on pin 2 or 3.  
    
     B   Name of a function you want to execute while in interrupt A.
@@ -34,7 +34,7 @@ PIR motion detector sensor with Arduino nano in ultimate power saving mode
                 CHANGE     a change in level trigger
                 RISING     a rising edge of a level trigger
                 FALLING    a falling edge of a level trigger
-   `
+  >`
     In all but the IDLE sleep modes only LOW can be used.
     here since PIR sensor has inbuilt timer to swtich its state from OFF to ON, we are detecting its CHANGE IN STATE to control our LED/relay at pin 13. 
     therefore, we will not need to use arduino delay timer to Set "ON time" of our LED/relay, it can be adjusted physically using potentiometer provided on PIR sensor board.
