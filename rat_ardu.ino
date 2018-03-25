@@ -41,44 +41,16 @@ ISR(WDT_vect) {
   }
 }
 
-
-
 void Hibernate()         // here arduino is put to sleep/hibernation
 {
- /*
- * SLEEP_MODE_IDLE - the lowest power saving mode
- * SLEEP_MODE_ADC
- * SLEEP_MODE_PWR_SAVE
- * SLEEP_MODE_STANDBY
- * SLEEP_MODE_PWR_DOWN - the highest power saving mode
- * "The Power-down mode saves the register contents but freezes the Oscillator, disabling all other chip functions 
- * until the next interrupt or hardware reset."  text from ATMEGA328P datasheet
- */
+
  set_sleep_mode(SLEEP_MODE_PWR_DOWN);  
  ADCSRA &= ~(1 << 7);   // Disable ADC - don't forget to flip back after waking up if you need ADC in your application ADCSRA |= (1 << 7);  (From Kevin's sketch)
     
  sleep_enable();                       // enable the sleep mode function
  sleep_bod_disable();                  //to disable the Brown Out Detector (BOD) before going to sleep. 
 
-   /*
-   * attachInterrupt(A, B, C)
-   * A   can be either 0 or 1 for interrupts on pin 2 or 3.  
-   *
-   * B   Name of a function you want to execute while in interrupt A.
-   *
-   * C   Trigger mode of the interrupt pin. can be:
-   *             LOW        a low level trigger
-   *             CHANGE     a change in level trigger
-   *             RISING     a rising edge of a level trigger
-   *             FALLING    a falling edge of a level trigger
-   *
-   * In all but the IDLE sleep modes only LOW can be used.
-   * here since PIR sensor has inbuilt timer to swtich its state from OFF to ON, we are detecting its CHANGE IN STATE to control our LED/relay at pin 13. 
-   * therefore, we will not need to use arduino delay timer to Set "ON time" of our LED/relay, it can be adjusted physically using potentiometer provided on PIR sensor board.
-   * This further helps in using SLEEP_MODE_PWR_DOWN which is ultimate lowest power consumption mode for ATMEGA8328P chip  
-   * (please note - because of onboard power regulators of arduino boards, power consumption cannot be reduced to predicted few microAmps level of bare chips. 
-   * To achieve further reduction in current consumption, we will need bare ATMEGA328P chip)
-   */
+
  attachInterrupt(PIRsensorInterrupt,wakeUpNow, CHANGE);   // Attach interrupt at pin D2  (int 0 is at pin D2  for nano, UNO)
  /*
   //Convering all to input
