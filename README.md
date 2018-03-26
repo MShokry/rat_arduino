@@ -6,7 +6,9 @@ PIR motion detector sensor with Arduino nano in ultimate power saving mode
 **(reducing power consumption almost by 87% (1.7mA) of normal operation consumption (13mA)) **
 [Thanks to:- ](http://playground.arduino.cc/Learning/ArduinoSleepCode)  for information about sleep.h library and modes
 for useful explanation of  "Low Power Arduino! Deep Sleep Tutorial" for bare [Arduino uno chip](http://www.kevindarrah.com/download/arduino_code/LowPowerVideo.ino)
+[Thanks to :](https://theelectromania.blogspot.com.eg/2016/02/pir-motion-detector-with-arduino.html) Afull project for PIR + Arduino 
 The [Datasheet](http://www.atmel.com/images/atmel-8271-8-bit-avr-microcontroller-atmega48a-48pa-88a-88pa-168a-168pa-328-328p_datasheet_complete.pdf) Is here
+
 
 ** NOTE :** when coming back from POWER-DOWN mode, it takes a bit until the system is functional at 100%!! (typically <1sec) 
 
@@ -27,7 +29,7 @@ The [Datasheet](http://www.atmel.com/images/atmel-8271-8-bit-avr-microcontroller
 The Power-down mode saves the register contents but freezes the Oscillator, disabling all other chip functions 
 until the next interrupt or hardware reset."  text from ATMEGA328P datasheet
 
- ### AttachInterrupt(A, B, C)
+### AttachInterrupt(A, B, C)
 
 ```
     A   can be either 0 or 1 for interrupts on pin 2 or 3.  
@@ -40,6 +42,8 @@ until the next interrupt or hardware reset."  text from ATMEGA328P datasheet
                 RISING     a rising edge of a level trigger
                 FALLING    a falling edge of a level trigger
  
+```
+
 ```
  In all but the IDLE sleep modes only LOW can be used.
     here since PIR sensor has inbuilt timer to swtich its state from OFF to ON, we are detecting its CHANGE IN STATE to control our LED/relay at pin 13. 
@@ -64,13 +68,12 @@ The WDTCSR is used for configuring the time-out, mode of operation, etc
 In order to change WDE or the pre-scaler, we need to set WDCE (This will
 allow updates for 4 clock cycles).
 
-Set the WDCE bit (bit 4) and the WDE bit (bit 3) of the WDTCSR. The WDCE
-bit must be set in order to change WDE or the watchdog pre-scalers.
-Setting the WDCE bit will allow updates to the pre-scalers and WDE for 4
-clock cycles then it will be reset by hardware.
+Set the WDCE bit (bit 4) and the WDE bit (bit 3) of the WDTCSR.
+The WDCE bit must be set in order to change WDE or the watchdog pre-scalers.
+Setting the WDCE bit will allow updates to the pre-scalers and WDE for 4 clock cycles then it will be reset by hardware.
 
 ### WDTCSR 
-
+```
 Setting the watchdog pre-scaler value with VCC = 5.0V and 16mHZ
 WDP3 WDP2 WDP1 WDP0 | Number of WDT | Typical Time-out at Oscillator Cycles
 
@@ -84,8 +87,29 @@ WDP3 WDP2 WDP1 WDP0 | Number of WDT | Typical Time-out at Oscillator Cycles
 0    1    1    1    |  256K cycles  | 2.0 s
 1    0    0    0    |  512K cycles  | 4.0 s
 1    0    0    1    | 1024K cycles  | 8.0 s
-
-*Italic*
-**Bold**
+```
 ---
-[name](link)
+
+# ToDo
+
+### Rat Arduino Atmega Part
+:heavy_check_mark: PIR Sensor Connected to intterupt
+
+### Rat Arduino ESP Part 
+
+### Rat Eagle PCB Design
+Power off the PIR ??? Trainsitor 
+
+### PCB Prototyping and Aseembly 
+
+### Testing
+
+### Other
+
+---
+:heavy_check_mark: Done
+:ballot_box_with_check: Done
+:negative_squared_cross_mark: Not accepted
+:black_square_button: Todo
+:bangbang: Top Urgent
+:heavy_exclamation_mark: Urgent

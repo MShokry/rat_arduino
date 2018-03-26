@@ -12,9 +12,9 @@
 const int PIRsensorInterrupt = 0; //interrupt 0 at arduino nano pin D2
 const int PIRsensor = 2;          //interrupt 0 at arduino nano pin D2
 const int LedPin = 13;            // external LED or relay connected to pin 13
-const int btn_update = 9;
-const int btn_config = 10;
-const int btn_reset = 11;
+const int btn_update = 14;
+const int btn_config = 15;
+const int btn_reset = 16;
 
 const int esp_wake = 4;           //Reset and EN
 const int esp_motion = 5;         // Motion detected 
