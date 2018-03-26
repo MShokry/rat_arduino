@@ -1,14 +1,19 @@
 
 ## Refrances
 
-By Mahmoud Shokry.
-PIR motion detector sensor with Arduino nano in ultimate power saving mode 
-**(reducing power consumption almost by 87% (1.7mA) of normal operation consumption (13mA)) **
-[Thanks to:- ](http://playground.arduino.cc/Learning/ArduinoSleepCode)  for information about sleep.h library and modes
-for useful explanation of  "Low Power Arduino! Deep Sleep Tutorial" for bare [Arduino uno chip](http://www.kevindarrah.com/download/arduino_code/LowPowerVideo.ino)
-[Thanks to :](https://theelectromania.blogspot.com.eg/2016/02/pir-motion-detector-with-arduino.html) Afull project for PIR + Arduino 
-The [Datasheet](http://www.atmel.com/images/atmel-8271-8-bit-avr-microcontroller-atmega48a-48pa-88a-88pa-168a-168pa-328-328p_datasheet_complete.pdf) Is here
+By :: Mahmoud Shokry. ::
 
+PIR motion detector sensor with Arduino nano in ultimate power saving mode 
+
+** reducing power consumption almost by 87% (1.7mA) of normal operation consumption(13mA) **
+
+[Thanks to:- ](http://playground.arduino.cc/Learning/ArduinoSleepCode)  for information about sleep.h library and modes
+
+for useful explanation of  "Low Power Arduino! Deep Sleep Tutorial" for bare [Arduino uno chip](http://www.kevindarrah.com/download/arduino_code/LowPowerVideo.ino)
+
+[Thanks to :](https://theelectromania.blogspot.com.eg/2016/02/pir-motion-detector-with-arduino.html) Afull project for PIR + Arduino 
+
+The [Datasheet](http://www.atmel.com/images/atmel-8271-8-bit-avr-microcontroller-atmega48a-48pa-88a-88pa-168a-168pa-328-328p_datasheet_complete.pdf) Is here
 
 ** NOTE :** when coming back from POWER-DOWN mode, it takes a bit until the system is functional at 100%!! (typically <1sec) 
 
