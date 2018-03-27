@@ -95,6 +95,7 @@ WDP3 WDP2 WDP1 WDP0 | Number of WDT | Typical Time-out at Oscillator Cycles
 ```
 ---
 # Ideas
+
 PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 3btn -------^     
 
@@ -102,24 +103,30 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 # ToDo
 
 ### Rat Arduino Atmega Part
-:ballot_box_with_check: Motion detected 1st time Wakeup ESP 
-:ballot_box_with_check: Sleep until ESP is DONE 
 
-:ballot_box_with_check: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt)
-:black_square_button: change F_CPU to 1MHZ or 4MHZ => PROWN and speed 
 :heavy_check_mark: PIR Sensor Connected to intterupt
-:black_square_button: Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not accepted If clock is 1 MHZ no need
+:ballot_box_with_check: Motion detected 1st time Wakeup ESP 
+:black_square_button: Sleep until ESP is DONE 
+:black_square_button: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt)
+:black_square_button: change F_CPU to 1MHZ or 4MHZ => PROWN and speed 
+:black_square_button: Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need
+
 #### Limitations
+
 ?? ??? :negative_squared_cross_mark: btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working.
+
 ### Rat Arduino ESP Part 
+
 :black_square_button: Wakeup init WIFI and connect
 :black_square_button: send to server (Battery level,Alarm) <==>
 :black_square_button: WIFI OFF :black_square_button: Moderated sleep
 :black_square_button: Raise Flag for nono operations ok 
 :black_square_button: Power off from arduino 
 
-Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino)
+:bangbang: What if server not connected or Wrong response ,...
+:bangbang: What if esp raised the flag and not off
 
+Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino) ** OR ** Wifi-Multi 
 
 ### Rat Eagle PCB Design
 :black_square_button:
