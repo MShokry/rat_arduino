@@ -24,8 +24,11 @@ const int esp_ack = 8;            // Done oeration and ready to sleep
 
 volatile int lastPIRsensorState = 1;  // previous sensor state
 volatile int PIRsensorState = 0;  // current state of the button
+bool PIRstable = FALSE;           // Indicates if the PIR goot enough time to stable
+bool alarm = FALSE;               // Alarm activated ???
 
 volatile int wdt_wake=0;
+volatile int wtd_delay = 0;     // Delay with WDT
 
 void wakeUpNow(){                 // Interrupt service routine or ISR  
   PIRsensorState = !lastPIRsensorState;    // we negate previous state and assign to current state
@@ -34,49 +37,67 @@ void wakeUpNow(){                 // Interrupt service routine or ISR
 // Watchdog Interrupt Service. This is executed when watchdog timed out.
 ISR(WDT_vect) {
   if(wdt_wake == 0) {
-    // here we can implement a counter the can set the wdt_wake to true if
     // the watchdog cycle needs to run longer than the maximum of eight
     // seconds.
-    wdt_wake=1;
+    if (wtd_delay){
+      wtd_delay--;
+    }else{
+      wdt_wake=1;
+    }
   }
 }
 
 void Hibernate()         // here arduino is put to sleep/hibernation
 {
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);  
+  ADCSRA &= ~(1 << 7);   // Disable ADC - don't forget to flip back after waking up if you need ADC in your application ADCSRA |= (1 << 7);  (From Kevin's sketch)
 
- set_sleep_mode(SLEEP_MODE_PWR_DOWN);  
- ADCSRA &= ~(1 << 7);   // Disable ADC - don't forget to flip back after waking up if you need ADC in your application ADCSRA |= (1 << 7);  (From Kevin's sketch)
-    
- sleep_enable();                       // enable the sleep mode function
- sleep_bod_disable();                  //to disable the Brown Out Detector (BOD) before going to sleep. 
+  sleep_enable();                       // enable the sleep mode function
+  sleep_bod_disable();                  //to disable the Brown Out Detector (BOD) before going to sleep. 
 
-
- attachInterrupt(PIRsensorInterrupt,wakeUpNow, CHANGE);   // Attach interrupt at pin D2  (int 0 is at pin D2  for nano, UNO)
- /*
+  attachInterrupt(PIRsensorInterrupt,wakeUpNow, CHANGE);   // Attach interrupt at pin D2  (int 0 is at pin D2  for nano, UNO)
+  /*
   //Convering all to input
-   for (int i = 0; i < 20; i++) {
+  for (int i = 0; i < 20; i++) {
     if(i != 13)//  because the LED/Relay is connected to digital pin 13
-    pinMode(i, INPUT);
+      pinMode(i, INPUT);
   }*/
- 
- sleep_mode();                // calls function to put arduino in sleep mode
- 
- sleep_disable();            // when interrupt is received, sleep mode is disabled and program execution resumes from here
- detachInterrupt(PIRsensorInterrupt);   // we detach interrupt from pin D2, to avoid further interrupts until our ISR is finished
+
+  sleep_mode();                // calls function to put arduino in sleep mode
+
+  sleep_disable();            // when interrupt is received, sleep mode is disabled and program execution resumes from here
+  detachInterrupt(PIRsensorInterrupt);   // we detach interrupt from pin D2, to avoid further interrupts until our ISR is finished
+}
+
+void LightSleep(){
+  set_sleep_mode(SLEEP_MODE_IDLE); // sleep mode is set here
+  sleep_enable(); // enables the sleep bit in the mcucr register
+  // so sleep is possible. just a safety pin
+  power_timer0_disable();
+  power_timer1_disable();
+  power_timer2_disable();
+
+  sleep_mode(); // here the device is actually put to sleep!!
+  // THE PROGRAM CONTINUES FROM HERE AFTER WAKING UP
+  sleep_disable(); // first thing after waking from sleep:
+  // disable sleep...
+  
 }
 
 
 // Setup the Watch Dog Timer (WDT)
 void setupWatchDogTimer() {
-  
   // Clear the reset flag on the MCUSR, the WDRF bit (bit 3).
   MCUSR &= ~(1<<WDRF);
 
   WDTCSR |= (1<<WDCE) | (1<<WDE);
-  
+
   WDTCSR  = (0<<WDP3) | (1<<WDP2) | (1<<WDP1) | (1<<WDP0);
   // Enable the WD interrupt (note: no reset).
   WDTCSR |= _BV(WDIE);
+}
+void setupTimer(){
+
 }
 
 void setup() {
@@ -98,41 +119,45 @@ void setup() {
   digitalWrite(esp_update, LOW);
   digitalWrite(esp_wake, LOW);
 
+  // Disable all Not needed 
+  power_adc_disable();
+  power_spi_disable();
+  power_timer0_disable();
+  power_timer1_disable();
+  power_timer2_disable();
+  power_twi_disable();
+  power_usart_disable();
 
   //Serial.begin(115200);     // initialize serial communication only for debugging purpose
-  // Serial.println("Warming up... wait for a min...");
-
- // delay execution of sketch for a min, to allow PIR sensor get stabilized
- for( int i = 1; i <= 10; i++){  // LED at pin 13 blinks until PIR sensor is stabilized 10 seconds
+  //Serial.println("Warming up... wait for a min...");
+  //delay execution of sketch for a min, to allow PIR sensor get stabilized
+  for( int i = 1; i <= 10; i++){  // LED at pin 13 blinks until PIR sensor is stabilized 10 seconds
     delay(1000); 
- }
- 
- // Serial.println("Ready");     // enable only for debugging purpose
- setupWatchDogTimer(); 
-  
+  }
+  //Serial.println("Ready");     // enable only for debugging purpose
+  setupTimer(); 
 }
 
 void loop() {
- interrupts();    // enable interrupts for Due and Nano V3
+  interrupts();    // enable interrupts for Due and Nano V3
 
- if (PIRsensorState != lastPIRsensorState){
+  if (PIRsensorState != lastPIRsensorState and not alarm){
+    if (PIRsensorState == 1) {
+      digitalWrite(LedPin, HIGH); 
 
-  if (PIRsensorState == 0) {
-     digitalWrite(LedPin, LOW);
-   //  Serial.print("Sleeping-");            // enable for debugging
-   //  Serial.println(PIRsensorState);   // read status of interrupt pin
+      //Serial.print("Awake-");    // enable for debugging
+      //Serial.println(PIRsensorState);  // read status of interrupt pin   enable for debugging
+      delay(10);
+    }
+    else {       
+      
+      digitalWrite(LedPin, LOW);
+      //Serial.print("Sleeping-");            // enable for debugging
+      //Serial.println(PIRsensorState);   // read status of interrupt pin
+    }
   }
-  
-  else {       
-     digitalWrite(LedPin, HIGH); 
-    // Serial.print("Awake-");    // enable for debugging
-    //   Serial.println(PIRsensorState);  // read status of interrupt pin   enable for debugging
-     delay(50);
-      }
-  }
-
-   lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
-   delay(50);
-   Hibernate();   // go to sleep - calling sleeping function
+  lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
+  delay(10);
+  Hibernate();   // go to sleep - calling sleeping function
 }
 

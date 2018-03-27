@@ -15,7 +15,7 @@ for useful explanation of  "Low Power Arduino! Deep Sleep Tutorial" for bare [Ar
 
 The [Datasheet](http://www.atmel.com/images/atmel-8271-8-bit-avr-microcontroller-atmega48a-48pa-88a-88pa-168a-168pa-328-328p_datasheet_complete.pdf) Is here
 
-** NOTE :** when coming back from POWER-DOWN mode, it takes a bit until the system is functional at 100%!! (typically <1sec) 
+** NOTE : ** when coming back from POWER-DOWN mode, it takes a bit until the system is functional at 100%!! (typically <1sec) 
 
 --- 
 
@@ -94,15 +94,35 @@ WDP3 WDP2 WDP1 WDP0 | Number of WDT | Typical Time-out at Oscillator Cycles
 1    0    0    1    | 1024K cycles  | 8.0 s
 ```
 ---
+# Ideas
+PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
+3btn -------^     
+
 
 # ToDo
 
 ### Rat Arduino Atmega Part
-:heavy_check_mark: PIR Sensor Connected to intterupt
+:ballot_box_with_check: Motion detected 1st time Wakeup ESP 
+:ballot_box_with_check: Sleep until ESP is DONE 
 
+:ballot_box_with_check: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt)
+:black_square_button: change F_CPU to 1MHZ or 4MHZ => PROWN and speed 
+:heavy_check_mark: PIR Sensor Connected to intterupt
+:black_square_button: Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not accepted If clock is 1 MHZ no need
+#### Limitations
+?? ??? :negative_squared_cross_mark: btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working.
 ### Rat Arduino ESP Part 
+:black_square_button: Wakeup init WIFI and connect
+:black_square_button: send to server (Battery level,Alarm) <==>
+:black_square_button: WIFI OFF :black_square_button: Moderated sleep
+:black_square_button: Raise Flag for nono operations ok 
+:black_square_button: Power off from arduino 
+
+Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino)
+
 
 ### Rat Eagle PCB Design
+:black_square_button:
 Power off the PIR ??? Trainsitor 
 
 ### PCB Prototyping and Aseembly 
