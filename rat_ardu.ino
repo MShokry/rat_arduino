@@ -165,26 +165,32 @@ if (PIRsensorState != lastPIRsensorState and not alarm){
     digitalWrite(esp_wake, HIGH);       // Ready wake the esp 
     PRINTDEBUG("Awake- ");    // enable for debugging
     PRINTDEBUGLN(PIRsensorState);  // read status of interrupt pin   enable for debugging
-    delay(50); // About 50 milliscond for esp to wake up
+    delay(100); // About 50 milliscond for esp to wake up
     PRINTDEBUGLN("ESP Waiting: ~100 msec each .");
     // #todo may goto sleep here for more power saving if esp sleep >10 sec
     while(!digitalRead(esp_ack)){
       PRINTDEBUG(".");
       delay(100);
     }
+    PRINTDEBUGLN("ESP ack");            // enable for debugging
     if(digitalRead(esp_ok)){
       alarm = true;
+      PRINTDEBUGLN("Alarm activated-");            // enable for debugging
     }else{
       alarm = false;
+      PRINTDEBUGLN("Alarm Not activated-");            // enable for debugging
     }    
   }
   else {       
-    digitalWrite(LedPin, LOW);
+    
     PRINTDEBUG("Sleeping-");            // enable for debugging
     PRINTDEBUGLN(PIRsensorState);   // read status of interrupt pin
   }
 }
 lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
+digitalWrite(LedPin, LOW);
+digitalWrite(esp_motion, LOW);     // motion flag high
+digitalWrite(esp_wake, LOW);       // Ready wake the esp 
 delay(10);
 Hibernate();   // go to sleep - calling sleeping function
 }
