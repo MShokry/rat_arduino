@@ -1,11 +1,11 @@
 
 ## Refrances
 
-By :: Mahmoud Shokry. ::
+By :: Mahmoud Shokry :: 
 
 PIR motion detector sensor with Arduino nano in ultimate power saving mode 
 
-** reducing power consumption almost by 87% (1.7mA) of normal operation consumption(13mA) **
+**reducing power consumption almost by 87% (1.7mA) of normal operation consumption(13mA)**
 
 [Thanks to:- ](http://playground.arduino.cc/Learning/ArduinoSleepCode) for information about sleep.h library and modes
 
@@ -102,9 +102,28 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 
 # ToDo
 
+**Project** started 07Feb2017
+
+### Spex
+
+:ballot_box_with_check: Motion sensor
+:ballot_box_with_check: Battery powered 
+:ballot_box_with_check: Battery Level
+:ballot_box_with_check: Buttons, Update, Config, Test, Reset
+:ballot_box_with_check: 
+
+### Battery 
+
+:negative_squared_cross_mark: LDO (SPX3819, HT7333, XC6203) [Baterry Serial Resistor]
+:negative_squared_cross_mark: High Capacitor LOW ESR
+:negative_squared_cross_mark: Buck/Boost MC33063 ( 0.9:6v => 2.37$/Unit)
+:negative_squared_cross_mark: LiFePo4 battaries 3.6V 5$
+:negative_squared_cross_mark: Battery Shield USB-Lithium 3.3V
+:ballot_box_with_check: Direct connect battery
+
 ### Rat Arduino Atmega Part
 
-:heavy_check_mark: PIR Sensor Connected to intterupt
+:ballot_box_with_check:  PIR Sensor Connected to intterupt
 :ballot_box_with_check: Motion detected 1st time Wakeup ESP 
 :black_square_button: Sleep until ESP is DONE  ??
 :black_square_button: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt)
@@ -114,12 +133,16 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 #### Limitations
 
 ?? ??? :negative_squared_cross_mark: btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working.
+Arduino @16MHZ normal + POR @ 2.7v
+motion stable @ > 4V
+
 
 ### Rat Arduino ESP Part 
 
 :black_square_button: Wakeup init WIFI and connect
-:black_square_button: send to server (Battery level,Alarm) <==>
-:black_square_button: WIFI OFF :black_square_button: Moderated sleep
+:black_square_button: send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function]
+:black_square_button: Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte
+:black_square_button: WIFI OFF :black_square_button: Moderated sleep 10uA @ Sleep
 :black_square_button: Raise Flag for nono operations ok 
 :black_square_button: Power off from arduino 
 
