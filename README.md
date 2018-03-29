@@ -7,7 +7,7 @@ PIR motion detector sensor with Arduino nano in ultimate power saving mode
 
 ** reducing power consumption almost by 87% (1.7mA) of normal operation consumption(13mA) **
 
-[Thanks to:- ](http://playground.arduino.cc/Learning/ArduinoSleepCode)  for information about sleep.h library and modes
+[Thanks to:- ](http://playground.arduino.cc/Learning/ArduinoSleepCode) for information about sleep.h library and modes
 
 for useful explanation of  "Low Power Arduino! Deep Sleep Tutorial" for bare [Arduino uno chip](http://www.kevindarrah.com/download/arduino_code/LowPowerVideo.ino)
 
@@ -106,9 +106,9 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 
 :heavy_check_mark: PIR Sensor Connected to intterupt
 :ballot_box_with_check: Motion detected 1st time Wakeup ESP 
-:black_square_button: Sleep until ESP is DONE 
+:black_square_button: Sleep until ESP is DONE  ??
 :black_square_button: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt)
-:black_square_button: change F_CPU to 1MHZ or 4MHZ => PROWN and speed 
+:black_square_button: change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check
 :black_square_button: Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need
 
 #### Limitations
@@ -126,10 +126,11 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 :bangbang: What if server not connected or Wrong response ,...
 :bangbang: What if esp raised the flag and not off
 
-Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino) ** OR ** Wifi-Multi 
+Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino) **OR** Wifi-Multi 
 
 ### Rat Eagle PCB Design
-:black_square_button:
+
+:black_square_button: 
 Power off the PIR ??? Trainsitor 
 
 ### PCB Prototyping and Aseembly 
