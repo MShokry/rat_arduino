@@ -106,13 +106,14 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 **Project** started 07Feb2017
 
 ### Spex
+---
 :ballot_box_with_check: Motion sensor
 :ballot_box_with_check: Battery powered
 :ballot_box_with_check: Battery Level
 :ballot_box_with_check: Buttons, Update, Config, Test, Reset
 
 ### Battery 
-
+---
 :negative_squared_cross_mark: LDO (SPX3819, HT7333, XC6203) [Baterry Serial Resistor]
 :negative_squared_cross_mark: High Capacitor LOW ESR
 :negative_squared_cross_mark: Buck/Boost MC33063 ( 0.9:6v => 2.37$/Unit)
@@ -121,7 +122,7 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 :ballot_box_with_check: Direct connect battery 3 bat 
 
 ### Rat Arduino Atmega Part
-
+---
 :ballot_box_with_check:  PIR Sensor Connected to intterupt
 :ballot_box_with_check: Motion detected 1st time Wakeup ESP 
 :ballot_box_with_check: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt)
@@ -131,20 +132,20 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 :black_square_button: Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need
 
 #### Limitations
-
+---
 ?? ??? :negative_squared_cross_mark: btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working.
 :negative_squared_cross_mark: Arduino @16MHZ normal + POR @ 2.7v
 :negative_squared_cross_mark: motion stable @ > 4V
 
 ### Rat Arduino ESP Part 
-
+---
 [ESP PIN default state](http://rabbithole.wwwdotorg.org/2017/03/28/esp8266-gpio.html)
 :ballot_box_with_check: Wakeup init WIFI and connect
 :ballot_box_with_check: send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function] NEEDS Some testing
+:ballot_box_with_check: WIFI OFF :black_square_button: Moderated sleep 10uA @ Sleep
+:ballot_box_with_check: Raise Flag for nono operations ok 
+:ballot_box_with_check: Power off from arduino 
 :black_square_button: Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte
-:black_square_button: WIFI OFF :black_square_button: Moderated sleep 10uA @ Sleep
-:black_square_button: Raise Flag for nono operations ok 
-:black_square_button: Power off from arduino 
 
 :bangbang: What if server not connected or Wrong response ,...
 :bangbang: What if esp raised the flag and not off or dealy to answer max retry time 10 minutes
@@ -152,7 +153,7 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino) **OR** Wifi-Multi 
 
 ### Rat Eagle PCB Design
-
+---
 :black_square_button: ESP EN by default low by resitor 10K to ground
 :black_square_button: CAP to the button, Button to ground 
 :black_square_button: Keep out the programming CHECK code
