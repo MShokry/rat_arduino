@@ -8,6 +8,8 @@
 
 #include <avr/power.h>
 #include <avr/wdt.h>
+#include "PinChangeInterrupt.h"
+
 
 #define DEBUG 1
 #if (DEBUG==1)
@@ -18,19 +20,29 @@
   #define PRINTDEBUG(STR) /*NOTHING*/
 #endif
 
-const int PIRsensorInterrupt = 0; //interrupt 0 at arduino nano pin D2
-const int PIRsensor = 2;          //interrupt 0 at arduino nano pin D2
-const int LedPin = 13;            // external LED or relay connected to pin 13
-const int btn_update = 15;
-const int btn_config = 16;
-const int btn_reset = 17;
+// Dont use SS,MOSI,MISO,SCK ; D10,11,12,13  // RX,TX ; 
 
-const int esp_wake = 4;           //Reset and EN => To ESP
-const int esp_motion = 5;         // Motion detected 
-const int esp_config = 6;         // Config button
-const int esp_update = 7;         // Update button
-const int esp_ack = 8;            // Done oeration and ready to sleep
-const int esp_ok = 14;
+const int PIRsensorInterrupt = 0 ;//interrupt 0 at arduino nano pin D2
+const int PIRsensor          = 2 ;//interrupt 0 at arduino nano pin D2
+const int LedPin             = 13;// external LED or relay connected to pin 13
+const int btn_update         = A1;
+const int btn_config         = A2;
+const int btn_reset          = A3;
+const int btn_test           = A4;
+bool UPDATE_FLAG        = false;
+bool CONFIG_FLAG        = false;
+bool RESET_FLAG         = false;
+bool TEST_FLAG          = false;
+
+const int esp_wake    = 4;           //Reset and EN => To ESP
+const int esp_motion  = 5;         // Motion detected 
+const int esp_config  = 6;         // Config button
+const int esp_update  = 7;         // Update button
+const int esp_ack     = 8;            // Done oeration and ready to sleep
+const int esp_ok      = A0;
+const unsigned long max_wait_server = 3000; //6000 *100msec = 5 Minutes 
+const unsigned long max_wait_config = 9000; //6000 *100msec = 15 Minutes 
+unsigned long timer = 0;
 
 volatile int lastPIRsensorState = 1;  // previous sensor state
 volatile int PIRsensorState = 0;  // current state of the button
@@ -40,10 +52,31 @@ bool alarm = false;               // Alarm activated ???
 volatile int wdt_wake=0;
 volatile int wtd_delay = 0;     // Delay with WDT
 
+
+/*************************************************************************************
+ *  POR Wake UP
+ *************************************************************************************/
 void wakeUpNow(){                 // Interrupt service routine or ISR  
   PIRsensorState = !lastPIRsensorState;    // we negate previous state and assign to current state
 }
-
+/*************************************************************************************
+ *  Change in PCINT for the buttons
+ *************************************************************************************/
+void reset_isr(void) {
+  RESET_FLAG = true;
+}
+void config_isr(void) {
+  CONFIG_FLAG = true;
+}
+void update_isr(void) {
+  UPDATE_FLAG = true;
+}
+void test_isr(void){
+  TEST_FLAG = true;
+}
+/*************************************************************************************
+ *  WDT Wake up ISR
+ *************************************************************************************/
 // Watchdog Interrupt Service. This is executed when watchdog timed out.
 ISR(WDT_vect) {
   if(wdt_wake == 0) {
@@ -57,6 +90,10 @@ ISR(WDT_vect) {
   }
 }
 
+/*************************************************************************************
+ *  Deep Sleep
+ *************************************************************************************/
+
 void Hibernate()         // here arduino is put to sleep/hibernation
 {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);  
@@ -64,7 +101,10 @@ void Hibernate()         // here arduino is put to sleep/hibernation
 
   sleep_enable();                       // enable the sleep mode function
   sleep_bod_disable();                  //to disable the Brown Out Detector (BOD) before going to sleep. 
-
+  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_update), update_isr, FALLING);
+  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_config), config_isr, FALLING);
+  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_reset), reset_isr, FALLING);
+  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_test), test_isr, FALLING);
   attachInterrupt(PIRsensorInterrupt,wakeUpNow, CHANGE);   // Attach interrupt at pin D2  (int 0 is at pin D2  for nano, UNO)
   /*
   //Convering all to input
@@ -77,7 +117,15 @@ void Hibernate()         // here arduino is put to sleep/hibernation
 
   sleep_disable();            // when interrupt is received, sleep mode is disabled and program execution resumes from here
   detachInterrupt(PIRsensorInterrupt);   // we detach interrupt from pin D2, to avoid further interrupts until our ISR is finished
+  detachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_reset));
+  detachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_config));
+  detachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_reset));
+  detachPinChangeInterrupt(digitalPinToPinChangeInterrupt(btn_test));
 }
+
+/*************************************************************************************
+ *  Light Sleep version
+ *************************************************************************************/
 
 void LightSleep(){
   set_sleep_mode(SLEEP_MODE_IDLE); // sleep mode is set here
@@ -94,6 +142,9 @@ void LightSleep(){
   
 }
 
+/*************************************************************************************
+ *  WDT Setup as A Timer
+ *************************************************************************************/
 
 // Setup the Watch Dog Timer (WDT)
 void setupWDTimer() {
@@ -106,29 +157,40 @@ void setupWDTimer() {
   // Enable the WD interrupt (note: no reset).
   WDTCSR |= _BV(WDIE);
 }
+/*************************************************************************************
+ *  Timer as Timing Function
+ *************************************************************************************/
 void setupTimer(){
 
 }
 
+/*************************************************************************************
+ *  Main Setup
+ *************************************************************************************/
 void setup() {
-  pinMode(LedPin, OUTPUT);        // initialize pin 13 as an output pin for LED or relay etc.
-  pinMode(PIRsensor, INPUT);      // define interrupt pin D2 as input to read interrupt received by PIR sensor
-  pinMode(btn_config, INPUT);
-  pinMode(btn_update, INPUT);
-  pinMode(btn_reset, INPUT);
 
   pinMode(esp_wake, OUTPUT);
+  digitalWrite(esp_wake, LOW);
+
+  pinMode(PIRsensor, INPUT);      // define interrupt pin D2 as input to read interrupt received by PIR sensor
+  pinMode(btn_config, INPUT_PULLUP);
+  pinMode(btn_update, INPUT_PULLUP);
+  pinMode(btn_reset, INPUT_PULLUP);
+  pinMode(btn_test, INPUT_PULLUP);
+  pinMode(esp_ack, INPUT);
+
+  pinMode(LedPin, OUTPUT);        // initialize pin 13 as an output pin for LED.
   pinMode(esp_update, OUTPUT);
   pinMode(esp_config, OUTPUT);
   pinMode(esp_motion, OUTPUT);
-  pinMode(esp_ack, INPUT);
 
   digitalWrite(LedPin, LOW);
   digitalWrite(esp_motion, LOW);
   digitalWrite(esp_config, LOW);
   digitalWrite(esp_update, LOW);
-  digitalWrite(esp_wake, LOW);
+  
   #if (DEBUG==1)
+    power_usart0_enable();
     Serial.begin(115200);     // Initialize serial communications
     delay(100);
     Serial.println();
@@ -142,7 +204,8 @@ void setup() {
   //power_timer2_disable();
   power_twi_disable();
   #if (DEBUG==0)
-    power_usart_disable();
+    //power_usart_disable();
+    power_usart0_disable();
   #endif
   PRINTDEBUGLN("Warming up... wait for a min...");
   //delay execution of sketch for a min, to allow PIR sensor get stabilized
@@ -156,40 +219,93 @@ void setup() {
 void loop() {
 interrupts();    // enable interrupts for Due and Nano V3
 
-if (PIRsensorState != lastPIRsensorState and not alarm){
-  if (PIRsensorState == 1) {
+if ((PIRsensorState != lastPIRsensorState and not alarm) or TEST_FLAG){
+  if (PIRsensorState == 1 or TEST_FLAG) { //Activate Process on High pulse of motion
     #if (DEBUG==1)
       digitalWrite(LedPin, HIGH);         // Indicator for testing
     #endif
     digitalWrite(esp_motion, HIGH);     // motion flag high
+    delay(20);
     digitalWrite(esp_wake, HIGH);       // Ready wake the esp 
     PRINTDEBUG("Awake- ");    // enable for debugging
     PRINTDEBUGLN(PIRsensorState);  // read status of interrupt pin   enable for debugging
-    delay(100); // About 50 milliscond for esp to wake up
+    delay(200); // About 200 milliscond for esp to wake up and all stable
     PRINTDEBUGLN("ESP Waiting: ~100 msec each .");
     // #todo may goto sleep here for more power saving if esp sleep >10 sec
-    while(!digitalRead(esp_ack)){
+    timer = max_wait_server;
+    while(!digitalRead(esp_ack) and timer>0){
       PRINTDEBUG(".");
       delay(100);
+      timer --;
     }
     PRINTDEBUGLN("ESP ack");            // enable for debugging
-    if(digitalRead(esp_ok)){
-      alarm = true;
-      PRINTDEBUGLN("Alarm activated-");            // enable for debugging
-    }else{
+    if(not TEST_FLAG){                  // If testing Dont consider sending done or not
+      if(digitalRead(esp_ok)){
+        alarm = true;
+        PRINTDEBUGLN("Alarm activated-");            // enable for debugging
+      }else{
+        alarm = false;
+        PRINTDEBUGLN("Alarm Not activated-");            // enable for debugging
+      } 
+    }else{ //On test reset the alarm
       alarm = false;
-      PRINTDEBUGLN("Alarm Not activated-");            // enable for debugging
-    }    
+    }   
   }
   else {       
-    
     PRINTDEBUG("Sleeping-");            // enable for debugging
     PRINTDEBUGLN(PIRsensorState);   // read status of interrupt pin
   }
-}
-lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
-digitalWrite(LedPin, LOW);
+digitalWrite(esp_wake, LOW);
 digitalWrite(esp_motion, LOW);     // motion flag high
+lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
+TEST_FLAG = false;
+}
+if(UPDATE_FLAG){
+  digitalWrite(esp_update, HIGH);     // motion flag high
+  delay(20);
+  digitalWrite(esp_wake, HIGH);       // Ready wake the esp 
+  PRINTDEBUG("Awake- For Upadte");    // enable for debugging
+  delay(200); // About 200 milliscond for esp to wake up and all stable
+  PRINTDEBUGLN("ESP Waiting: ~100 msec each .");
+  // #todo may goto sleep here for more power saving if esp sleep >10 sec
+  timer = max_wait_server;
+  while(!digitalRead(esp_ack) and timer>0){
+    PRINTDEBUG(".");
+    PRINTDEBUG(--timer);
+    delay(100);
+  }
+  PRINTDEBUGLN("");
+  PRINTDEBUGLN("ESP ack");            // enable for debugging
+  digitalWrite(esp_wake, LOW);
+  digitalWrite(esp_update, LOW);
+  UPDATE_FLAG = false;
+}
+if(CONFIG_FLAG){
+  digitalWrite(esp_config, HIGH);     // motion flag high
+  delay(20);
+  digitalWrite(esp_wake, HIGH);       // Ready wake the esp 
+  PRINTDEBUG("Awake- For Config");    // enable for debugging
+  delay(200); // About 200 milliscond for esp to wake up and all stable
+  PRINTDEBUGLN("ESP Waiting: ~100 msec each .");
+  // #todo may goto sleep here for more power saving if esp sleep >10 sec
+  timer = max_wait_config;
+  while(!digitalRead(esp_ack) and timer>0){
+    PRINTDEBUG(".");
+    PRINTDEBUG(--timer);
+    delay(100);
+  }
+  PRINTDEBUGLN("");
+  PRINTDEBUGLN("ESP ack");            // enable for debugging
+  digitalWrite(esp_wake, LOW);
+  digitalWrite(esp_config, LOW);  
+  CONFIG_FLAG = false;   
+}
+if(RESET_FLAG){
+ PRINTDEBUGLN("Soft Reset");            // enable for debugging
+ alarm = false;
+ RESET_FLAG = false;
+}
+digitalWrite(LedPin, LOW);
 digitalWrite(esp_wake, LOW);       // Ready wake the esp 
 delay(10);
 Hibernate();   // go to sleep - calling sleeping function

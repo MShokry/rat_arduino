@@ -17,6 +17,8 @@ The [Datasheet](http://www.atmel.com/images/atmel-8271-8-bit-avr-microcontroller
 
 ** NOTE : ** when coming back from POWER-DOWN mode, it takes a bit until the system is functional at 100%!! (typically <1sec) 
 
+[ESP](https://cdn-shop.adafruit.com/product-files/2471/0A-ESP8266__Datasheet__EN_v4.3.pdf)
+[ESP NODEMCU PIN](https://i.stack.imgur.com/w2Scr.jpg)
 --- 
 
 ## Sleeping Modes helper function Hibernate  
@@ -99,14 +101,13 @@ WDP3 WDP2 WDP1 WDP0 | Number of WDT | Typical Time-out at Oscillator Cycles
 PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 3btn -------^     
 
-
 # ToDo
 
 **Project** started 07Feb2017
 
 ### Spex
 :ballot_box_with_check: Motion sensor
-:ballot_box_with_check: Battery powered 
+:ballot_box_with_check: Battery powered
 :ballot_box_with_check: Battery Level
 :ballot_box_with_check: Buttons, Update, Config, Test, Reset
 
@@ -117,42 +118,46 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 :negative_squared_cross_mark: Buck/Boost MC33063 ( 0.9:6v => 2.37$/Unit)
 :negative_squared_cross_mark: LiFePo4 battaries 3.6V 5$
 :negative_squared_cross_mark: Battery Shield USB-Lithium 3.3V
-:ballot_box_with_check: Direct connect battery
+:ballot_box_with_check: Direct connect battery 3 bat 
 
 ### Rat Arduino Atmega Part
 
 :ballot_box_with_check:  PIR Sensor Connected to intterupt
 :ballot_box_with_check: Motion detected 1st time Wakeup ESP 
+:ballot_box_with_check: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt)
+
 :black_square_button: Sleep until ESP is DONE  ??
-:black_square_button: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt)
 :black_square_button: change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check
 :black_square_button: Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need
 
 #### Limitations
 
 ?? ??? :negative_squared_cross_mark: btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working.
-Arduino @16MHZ normal + POR @ 2.7v
-motion stable @ > 4V
-
+:negative_squared_cross_mark: Arduino @16MHZ normal + POR @ 2.7v
+:negative_squared_cross_mark: motion stable @ > 4V
 
 ### Rat Arduino ESP Part 
 
-:black_square_button: Wakeup init WIFI and connect
-:black_square_button: send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function]
+[ESP PIN default state](http://rabbithole.wwwdotorg.org/2017/03/28/esp8266-gpio.html)
+:ballot_box_with_check: Wakeup init WIFI and connect
+:ballot_box_with_check: send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function] NEEDS Some testing
 :black_square_button: Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte
 :black_square_button: WIFI OFF :black_square_button: Moderated sleep 10uA @ Sleep
 :black_square_button: Raise Flag for nono operations ok 
 :black_square_button: Power off from arduino 
 
 :bangbang: What if server not connected or Wrong response ,...
-:bangbang: What if esp raised the flag and not off
+:bangbang: What if esp raised the flag and not off or dealy to answer max retry time 10 minutes
 
 Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino) **OR** Wifi-Multi 
 
 ### Rat Eagle PCB Design
 
-:black_square_button: 
-Power off the PIR ??? Trainsitor 
+:black_square_button: ESP EN by default low by resitor 10K to ground
+:black_square_button: CAP to the button, Button to ground 
+:black_square_button: Keep out the programming CHECK code
+:black_square_button: Power off the PIR ??? Trainsitor 
+:black_square_button: Buzzer for feedback or server
 
 ### PCB Prototyping and Aseembly 
 
