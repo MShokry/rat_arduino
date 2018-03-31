@@ -107,10 +107,10 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 
 ### Spex
 ---
-:ballot_box_with_check: Motion sensor
-:ballot_box_with_check: Battery powered
-:ballot_box_with_check: Battery Level
-:ballot_box_with_check: Buttons, Update, Config, Test, Reset
+:ballot_box_with_check: Motion sensor <br>
+:ballot_box_with_check: Battery powered <br>
+:ballot_box_with_check: Battery Level <br>
+:ballot_box_with_check: Buttons, Update, Config, Test, Reset <br>
 
 ### Battery 
 ---
