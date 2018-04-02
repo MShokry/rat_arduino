@@ -162,6 +162,8 @@ Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/maste
 
 ### PCB Prototyping and Aseembly 
 
+[ESP Programming](http://www.instructables.com/id/ESP8266-a-Complete-Beginners-Guide-IOT/)
+
 ### Testing
 
 ### Other

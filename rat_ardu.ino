@@ -40,7 +40,7 @@ const int esp_config  = 6;         // Config button
 const int esp_update  = 7;         // Update button
 const int esp_ack     = 8;            // Done oeration and ready to sleep
 const int esp_ok      = A0;
-const unsigned long max_wait_server = 3000; //6000 *100msec = 5 Minutes 
+const unsigned long max_wait_server = 3000; //3000 *100msec = 5 Minutes 
 const unsigned long max_wait_config = 9000; //6000 *100msec = 15 Minutes 
 unsigned long timer = 0;
 
