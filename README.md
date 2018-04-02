@@ -127,15 +127,15 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 - [x] Motion detected 1st time Wakeup ESP <br>
 - [x] wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt) <br>
 
-- [] Sleep until ESP is DONE  ?? <br>
-- [] change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check <br>
-- [] Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need <br>
+- [ ] Sleep until ESP is DONE  ?? <br>
+- [ ] change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check <br>
+- [ ] Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need <br>
 
 #### Limitations
 ---
-- [c] btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working. <br>
-- [c] Arduino @16MHZ normal + POR @ 2.7v<br>
-- [c] motion stable @ > 4V<br>
+- [o] btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working. <br>
+- [n] Arduino @16MHZ normal + POR @ 2.7v<br>
+- [v] motion stable @ > 4V<br>
 
 ### Rat Arduino ESP Part 
 ---
@@ -145,7 +145,7 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 - [x] WIFI OFF - [] Moderated sleep 10uA @ Sleep<br>
 - [x] Raise Flag for nono operations ok <br>
 - [x] Power off from arduino <br>
-- [] Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte <br>
+- [ ] Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte <br>
 
 :bangbang: What if server not connected or Wrong response ,... <br>
 :bangbang: What if esp raised the flag and not off or dealy to answer max retry time 10 minutes <br>
