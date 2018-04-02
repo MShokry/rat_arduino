@@ -107,10 +107,10 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 
 ### Spex
 ---
-:ballot_box_with_check: Motion sensor <br>
-:ballot_box_with_check: Battery powered <br>
-:ballot_box_with_check: Battery Level <br>
-:ballot_box_with_check: Buttons, Update, Config, Test, Reset <br>
+- [x] Motion sensor <br>
+- [x] Battery powered <br>
+- [x] Battery Level <br>
+- [x] Buttons, Update, Config, Test, Reset <br>
 
 ### Battery 
 ---
@@ -119,33 +119,33 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 :negative_squared_cross_mark: Buck/Boost MC33063 ( 0.9:6v => 2.37$/Unit) <br>
 :negative_squared_cross_mark: LiFePo4 battaries 3.6V 5$ <br>
 :negative_squared_cross_mark: Battery Shield USB-Lithium 3.3V <br>
-:ballot_box_with_check: Direct connect battery 3 bat <br>
+- [x] Direct connect battery 3 bat <br>
 
 ### Rat Arduino Atmega Part
 ---
-:ballot_box_with_check:  PIR Sensor Connected to intterupt <br>
-:ballot_box_with_check: Motion detected 1st time Wakeup ESP <br>
-:ballot_box_with_check: wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt) <br>
+- [x]  PIR Sensor Connected to intterupt <br>
+- [x] Motion detected 1st time Wakeup ESP <br>
+- [x] wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt) <br>
 
-:black_square_button: Sleep until ESP is DONE  ?? <br>
-:black_square_button: change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check <br>
-:black_square_button: Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need <br>
+- [] Sleep until ESP is DONE  ?? <br>
+- [] change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check <br>
+- [] Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need <br>
 
 #### Limitations
 ---
-?? ??? :negative_squared_cross_mark: btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working. <br>
-:negative_squared_cross_mark: Arduino @16MHZ normal + POR @ 2.7v<br>
-:negative_squared_cross_mark: motion stable @ > 4V<br>
+- [c] btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working. <br>
+- [c] Arduino @16MHZ normal + POR @ 2.7v<br>
+- [c] motion stable @ > 4V<br>
 
 ### Rat Arduino ESP Part 
 ---
 [ESP PIN default state](http://rabbithole.wwwdotorg.org/2017/03/28/esp8266-gpio.html)<br>
-:ballot_box_with_check: Wakeup init WIFI and connect<br>
-:ballot_box_with_check: send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function] NEEDS Some testing<br>
-:ballot_box_with_check: WIFI OFF :black_square_button: Moderated sleep 10uA @ Sleep<br>
-:ballot_box_with_check: Raise Flag for nono operations ok <br>
-:ballot_box_with_check: Power off from arduino <br>
-:black_square_button: Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte <br>
+- [x] Wakeup init WIFI and connect<br>
+- [x] send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function] NEEDS Some testing<br>
+- [x] WIFI OFF - [] Moderated sleep 10uA @ Sleep<br>
+- [x] Raise Flag for nono operations ok <br>
+- [x] Power off from arduino <br>
+- [] Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte <br>
 
 :bangbang: What if server not connected or Wrong response ,... <br>
 :bangbang: What if esp raised the flag and not off or dealy to answer max retry time 10 minutes <br>
@@ -154,11 +154,11 @@ Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/maste
 
 ### Rat Eagle PCB Design
 ---
-:black_square_button: ESP EN by default low by resitor 10K to ground <br>
-:black_square_button: CAP to the button, Button to ground <br>
-:black_square_button: Keep out the programming CHECK code<br>
-:black_square_button: Power off the PIR ??? Trainsitor <br>
-:black_square_button: Buzzer for feedback or server<br>
+- [x] ESP EN by default low by resitor 10K to ground <br>
+- [] CAP to the button, Button to ground <br>
+- [] Keep out the programming CHECK code<br>
+- [] Power off the PIR ??? Trainsitor <br>
+- [] Buzzer for feedback or server<br>
 
 ### PCB Prototyping and Aseembly 
 
@@ -170,7 +170,7 @@ Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/maste
 
 ---
 :heavy_check_mark: Done
-:ballot_box_with_check: Done
+- [x] Done
 :negative_squared_cross_mark: Not accepted
 :black_square_button: Todo
 :bangbang: Top Urgent
