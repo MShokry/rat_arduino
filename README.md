@@ -155,10 +155,10 @@ Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/maste
 ### Rat Eagle PCB Design
 ---
 - [x] ESP EN by default low by resitor 10K to ground <br>
-- [] CAP to the button, Button to ground <br>
-- [] Keep out the programming CHECK code<br>
-- [] Power off the PIR ??? Trainsitor <br>
-- [] Buzzer for feedback or server<br>
+- [ ] CAP to the button, Button to ground <br>
+- [ ] Keep out the programming CHECK code<br>
+- [ ] Power off the PIR ??? Trainsitor <br>
+- [ ] Buzzer for feedback or server<br>
 
 ### PCB Prototyping and Aseembly 
 
