@@ -147,7 +147,9 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 - [x] Raise Flag for nono operations ok <br>
 - [x] Power off from arduino <br>
 - [ ] Names online not local Domain + URL => to be tested
-- [ ] Modify the lib Remove No Scan , [ ] Password for login, [ ] Label Names before input
+- [ ] Modify the lib Remove No Scan ,
+- [ ] Password for login,
+- [ ] Label Names before input
 - [ ] Test @ Test
 - [ ] Rename place to name
 - [ ] 5 Min for config as a max
