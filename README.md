@@ -111,6 +111,7 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 - [x] Battery powered <br>
 - [x] Battery Level <br>
 - [x] Buttons, Update, Config, Test, Reset <br>
+- [ ] Buzzer feedback
 
 ### Battery 
 ---
@@ -145,6 +146,13 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 - [x] WIFI OFF - [] Moderated sleep 10uA @ Sleep<br>
 - [x] Raise Flag for nono operations ok <br>
 - [x] Power off from arduino <br>
+- [ ] Names online not local Domain + URL => to be tested
+- [ ] Modify the lib Remove No Scan , [ ] Password for login, [ ] Label Names before input
+- [ ] Test @ Test
+- [ ] Rename place to name
+- [ ] 5 Min for config as a max
+- [ ] Default Name and servers for update and Max Len
+- [ ] Update Config Button to request the data from the server
 - [ ] Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte <br>
 
 :bangbang: What if server not connected or Wrong response ,... <br>
@@ -155,6 +163,7 @@ Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/maste
 ### Rat Eagle PCB Design
 ---
 - [x] ESP EN by default low by resitor 10K to ground <br>
+- [ ] add 5V power source
 - [ ] CAP to the button, Button to ground <br>
 - [ ] Keep out the programming CHECK code<br>
 - [ ] Power off the PIR ??? Trainsitor <br>
@@ -167,7 +176,8 @@ Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/maste
 ### Testing
 
 ### Other
-
+- [ ] API documentation
+- [ ] 100 Unit Price
 ---
 :heavy_check_mark: Done
 - [x] Done
