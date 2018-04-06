@@ -24,6 +24,7 @@
 
 const int PIRsensorInterrupt = 0 ;//interrupt 0 at arduino nano pin D2
 const int PIRsensor          = 2 ;//interrupt 0 at arduino nano pin D2
+const int BUZZER             = 9 ;// Feedback for human interface
 const int LedPin             = 13;// external LED or relay connected to pin 13
 const int btn_update         = A1;
 const int btn_config         = A2;
@@ -40,8 +41,9 @@ const int esp_config  = 6;         // Config button
 const int esp_update  = 7;         // Update button
 const int esp_ack     = 8;            // Done oeration and ready to sleep
 const int esp_ok      = A0;
-const unsigned long max_wait_server = 3000; //3000 *100msec = 5 Minutes 
-const unsigned long max_wait_config = 9000; //6000 *100msec = 15 Minutes 
+
+const unsigned long max_wait_server = 1800; //3000 *100msec = 5 Minutes 
+const unsigned long max_wait_config = 3000; //6000 *100msec = 15 Minutes 
 unsigned long timer = 0;
 
 volatile int lastPIRsensorState = 1;  // previous sensor state
@@ -165,6 +167,19 @@ void setupTimer(){
 }
 
 /*************************************************************************************
+ *  Human feedback Function
+ *************************************************************************************/
+
+void buzzing(int times=2,int delayh = 200,int delayl = 100,int red =0 ){
+  for(int i=0;i<times;i++){
+    digitalWrite(BUZZER, HIGH);         // Turns BUZZER ON
+    delay(delayh);
+    digitalWrite(BUZZER, LOW);         // Turns Relay Off
+    delay(delayl);
+  }
+}
+
+/*************************************************************************************
  *  Main Setup
  *************************************************************************************/
 void setup() {
@@ -188,6 +203,11 @@ void setup() {
   digitalWrite(esp_motion, LOW);
   digitalWrite(esp_config, LOW);
   digitalWrite(esp_update, LOW);
+  
+  pinMode(BUZZER, OUTPUT);        // initialize pin 13 as an output pin for LED.
+  digitalWrite(BUZZER, LOW);
+
+  
   
   #if (DEBUG==1)
     power_usart0_enable();
@@ -225,6 +245,10 @@ if ((PIRsensorState != lastPIRsensorState and not alarm) or TEST_FLAG){
       digitalWrite(LedPin, HIGH);         // Indicator for testing
     #endif
     digitalWrite(esp_motion, HIGH);     // motion flag high
+    if(TEST_FLAG){
+      PRINTDEBUGLN("Alarm Testing");
+      digitalWrite(esp_update, HIGH);
+    }
     delay(20);
     digitalWrite(esp_wake, HIGH);       // Ready wake the esp 
     PRINTDEBUG("Awake- ");    // enable for debugging
@@ -246,6 +270,7 @@ if ((PIRsensorState != lastPIRsensorState and not alarm) or TEST_FLAG){
       }else{
         alarm = false;
         PRINTDEBUGLN("Alarm Not activated-");            // enable for debugging
+        buzzing(2,200,200);
       } 
     }else{ //On test reset the alarm
       alarm = false;
@@ -257,6 +282,7 @@ if ((PIRsensorState != lastPIRsensorState and not alarm) or TEST_FLAG){
   }
 digitalWrite(esp_wake, LOW);
 digitalWrite(esp_motion, LOW);     // motion flag high
+digitalWrite(esp_update, LOW);
 lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
 TEST_FLAG = false;
 }
