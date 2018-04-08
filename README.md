@@ -107,69 +107,75 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 
 ### Spex
 ---
-- [x] Motion sensor <br>
-- [x] Battery powered <br>
-- [x] Battery Level <br>
-- [x] Buttons, Update, Config, Test, Reset <br>
-- [ ] Buzzer feedback
+- [x] Motion sensor 
+- [x] Battery powered 
+- [x] Battery Level 
+- [x] Buttons, Update, Config, Test, Reset 
+- [x] Buzzer feedback
 
 ### Battery 
 ---
-:negative_squared_cross_mark: LDO (SPX3819, HT7333, XC6203) [Baterry Serial Resistor] <br>
-:negative_squared_cross_mark: High Capacitor LOW ESR <br>
-:negative_squared_cross_mark: Buck/Boost MC33063 ( 0.9:6v => 2.37$/Unit) <br>
-:negative_squared_cross_mark: LiFePo4 battaries 3.6V 5$ <br>
-:negative_squared_cross_mark: Battery Shield USB-Lithium 3.3V <br>
-- [x] Direct connect battery 3 bat <br>
+:negative_squared_cross_mark: LDO (SPX3819, HT7333, XC6203) [Baterry Serial Resistor] 
+:negative_squared_cross_mark: High Capacitor LOW ESR 
+:negative_squared_cross_mark: Buck/Boost MC33063 ( 0.9:6v => 2.37$/Unit) 
+:negative_squared_cross_mark: LiFePo4 battaries 3.6V 5$ 
+:negative_squared_cross_mark: Battery Shield USB-Lithium 3.3V 
+- [x] Direct connect battery 3 bat 
 
 ### Rat Arduino Atmega Part
 ---
-- [x]  PIR Sensor Connected to intterupt <br>
-- [x] Motion detected 1st time Wakeup ESP <br>
-- [x] wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt) <br>
+- [x]  PIR Sensor Connected to intterupt 
+- [x] Motion detected 1st time Wakeup ESP 
+- [x] wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt) 
+- [x] Feedback Unit Buzzing(2 if not activated, @Config 1 Buzz OK, )
+- [x] btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working. 
+- [ ] change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check 
 
-- [ ] Sleep until ESP is DONE  ?? <br>
-- [ ] change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check <br>
-- [ ] Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need <br>
+- [ ] ?Sleep until ESP is DONE
+- [ ] ?Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need 
 
 #### Limitations
 ---
-- [o] btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working. <br>
-- [n] Arduino @16MHZ normal + POR @ 2.7v<br>
-- [v] motion stable @ > 4V<br>
+- [ ] Arduino @16MHZ normal + POR @ 2.7v
+- [ ] motion stable @ > 4V
 
 ### Rat Arduino ESP Part 
 ---
-[ESP PIN default state](http://rabbithole.wwwdotorg.org/2017/03/28/esp8266-gpio.html)<br>
-- [x] Wakeup init WIFI and connect<br>
-- [x] send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function] NEEDS Some testing<br>
-- [x] WIFI OFF - [] Moderated sleep 10uA @ Sleep<br>
-- [x] Raise Flag for nono operations ok <br>
-- [x] Power off from arduino <br>
-- [ ] Names online not local Domain + URL => to be tested
-- [ ] Modify the lib Remove No Scan ,
-- [ ] Password for login,
-- [ ] Label Names before input
-- [ ] Test @ Test
-- [ ] Rename place to name
-- [ ] 5 Min for config as a max
+[ESP PIN default state](http://rabbithole.wwwdotorg.org/2017/03/28/esp8266-gpio.html)
+
+- [x] Wakeup init WIFI and connect
+- [x] send to server (Battery level,Alarm) <==> [MAX17043 || Read_VCC function] NEEDS Some testing
+- [x] WIFI OFF 
+- [x] Moderated sleep 10uA @ Sleep
+- [x] Raise Flag for nono operations ok 
+- [x] Power off from arduino 
+- [x] Names online not local Domain + URL => to be tested
+- [x] Modify the lib Remove No Scan , :heavy_exclamation_mark: WIFI Manager Change HTTP_PORTAL_OPTIONS :next_track_button: Removed Scan button
+- [x] Label Names before input , :heavy_exclamation_mark: WIFI Manager Change HTTP_FORM_PARAM :next_track_button: add name {p} :
+- [x] msg=Test @ Test
+- [x] Rename place to name
+- [x] 5 Min for config as a max 3 for sending
+- [x] Update Config Button to request the data from the server
 - [ ] Default Name and servers for update and Max Len
-- [ ] Update Config Button to request the data from the server
-- [ ] Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte <br>
 
-:bangbang: What if server not connected or Wrong response ,... <br>
-:bangbang: What if esp raised the flag and not off or dealy to answer max retry time 10 minutes <br>
+- [ ] Lower WIFI RF Power 120mA @ Tx 13dpm, 56mA @ Rx 1024byte 
+- [ ] Password for login,
 
-Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino) **OR** Wifi-Multi <br>
+:bangbang: What if server not connected or Wrong response ,... 
+:bangbang: What if esp raised the flag and not off or dealy to answer max retry time 10 minutes 
+
+Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/master/examples/AutoConnectWithFSParametersAndCustomIP/AutoConnectWithFSParametersAndCustomIP.ino) **OR** Wifi-Multi 
 
 ### Rat Eagle PCB Design
 ---
-- [x] ESP EN by default low by resitor 10K to ground <br>
-- [ ] add 5V power source
-- [ ] CAP to the button, Button to ground <br>
-- [ ] Keep out the programming CHECK code<br>
-- [ ] Power off the PIR ??? Trainsitor <br>
-- [ ] Buzzer for feedback or server<br>
+- [x] ESP EN by default low by resitor 10K to ground 
+- [x] add 5V power source LDO and 3.3 Normal
+- [x] add Jummber for power source 
+- [x] Buzzer for feedback or server
+
+- [ ] CAP to the button, Button to ground 
+- [ ] Keep out the programming CHECK code
+- [ ] Power off the PIR ??? Trainsitor 
 
 ### PCB Prototyping and Aseembly 
 

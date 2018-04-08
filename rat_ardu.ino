@@ -11,7 +11,7 @@
 #include "PinChangeInterrupt.h"
 
 
-#define DEBUG 1
+#define DEBUG 0
 #if (DEBUG==1)
   #define PRINTDEBUGLN(STR) Serial.println(STR)
   #define PRINTDEBUG(STR) Serial.print(STR)
@@ -302,6 +302,13 @@ if(UPDATE_FLAG){
   }
   PRINTDEBUGLN("");
   PRINTDEBUGLN("ESP ack");            // enable for debugging
+  if(digitalRead(esp_ok)){
+        PRINTDEBUGLN("Done Update-");            // enable for debugging
+        buzzing(1,200,200);
+  } else{
+      PRINTDEBUGLN("Error Update-");            // enable for debugging
+        buzzing(2,200,200);
+  }
   digitalWrite(esp_wake, LOW);
   digitalWrite(esp_update, LOW);
   UPDATE_FLAG = false;
@@ -321,6 +328,13 @@ if(CONFIG_FLAG){
     delay(100);
   }
   PRINTDEBUGLN("");
+  if(digitalRead(esp_ok)){
+        PRINTDEBUGLN("Done Config-");            // enable for debugging
+        buzzing(1,200,200);
+  } else{
+    PRINTDEBUGLN("Error Config-");            // enable for debugging
+        buzzing(2,200,200);
+  }
   PRINTDEBUGLN("ESP ack");            // enable for debugging
   digitalWrite(esp_wake, LOW);
   digitalWrite(esp_config, LOW);  
