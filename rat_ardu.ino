@@ -211,7 +211,7 @@ void setup() {
   
   #if (DEBUG==1)
     power_usart0_enable();
-    Serial.begin(115200);     // Initialize serial communications
+    Serial.begin(9600);     // Initialize serial communications
     delay(100);
     Serial.println();
     Serial.println("Author:: Mahmoud Shokry");

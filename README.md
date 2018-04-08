@@ -98,7 +98,7 @@ WDP3 WDP2 WDP1 WDP0 | Number of WDT | Typical Time-out at Oscillator Cycles
 ---
 # Ideas
 
-PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
+PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP <br>
 3btn -------^     
 
 # ToDo
@@ -129,15 +129,15 @@ PIR -(int)-> Nano <--(Wake,Motion,config,Update)--> ESP
 - [x] wakeup on chnage of btn [PCINT](https://playground.arduino.cc/Main/PcInt) [used LIB](https://github.com/NicoHood/PinChangeInterrupt) 
 - [x] Feedback Unit Buzzing(2 if not activated, @Config 1 Buzz OK, )
 - [x] btn as interrupt in Power_down mode only (INT0,INT1,WDT) is working. 
-- [ ] change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check 
+- [x] change F_CPU to 1MHZ or 4MHZ => PROWN, Delay and speed check  [Using MiniCore](https://github.com/MCUdude/MiniCore)
 
 - [ ] ?Sleep until ESP is DONE
 - [ ] ?Delay with Timer or WDT LightSleep() or setupWatchDogTimer() :negative_squared_cross_mark: Not important If clock is 1 MHZ no need 
 
 #### Limitations
 ---
-- [ ] Arduino @16MHZ normal + POR @ 2.7v
-- [ ] motion stable @ > 4V
+- [x] Arduino @16MHZ normal + POR @ 2.7v
+- [x] motion stable @ > 4V
 
 ### Rat Arduino ESP Part 
 ---
@@ -180,6 +180,7 @@ Wifi configuration [wifi config](https://github.com/tzapu/WiFiManager/blob/maste
 ### PCB Prototyping and Aseembly 
 
 [ESP Programming](http://www.instructables.com/id/ESP8266-a-Complete-Beginners-Guide-IOT/)
+-U lfuse:w:0x62:m -U hfuse:w:0xd6:m -U efuse:w:0xfe:m
 
 ### Testing
 
