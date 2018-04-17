@@ -1,5 +1,5 @@
 
-# Documentaion
+# Documentation
 
 # Programing
 
@@ -47,7 +47,33 @@
 
 ESP [Programming](http://www.instructables.com/id/ESP8266-a-Complete-Beginners-Guide-IOT/) <br>
 -U lfuse:w:0x62:m -U hfuse:w:0xd6:m -U efuse:w:0xfe:m <br>
+
+
+
+## Production
+
 (https://tosiek.pl/usbasp-v2-0-warning-cannot-set-sck-period/)
 (https://jlcpcb.com)
 (https://www.smart-prototyping.com)
 (https://www.pcbway.com/orderonline.aspx)
+SUMMARY 100 Unit 
+Merchandise Total$28.85
+Shipping$36.34
+Grand Total:$65.19 Not Including Local Tax 
+SUMMARY 10 Unit 
+Merchandise Total$2
+Shipping$31.58
+Grand Total:$33.58  Not Including Local Tax 
+Stencil:7.00
+
+## assembly
+
+Jumpers 
+### Battery
+Bat => is for operation directly for battery
+BATL4.5 => LDO input source 4.5 pin
+BATL3.3 => LDO input source 3.3 pin
+### esp
+GPIO15 | GPIO0 | GPIO2 
+LOW       | LOW   |  HIGH Programming
+LOW       | HIGH  |  HIGH Boot
