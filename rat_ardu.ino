@@ -11,7 +11,7 @@
 #include "PinChangeInterrupt.h"
 
 
-#define DEBUG 0
+#define DEBUG 1
 #if (DEBUG==1)
   #define PRINTDEBUGLN(STR) Serial.println(STR)
   #define PRINTDEBUG(STR) Serial.print(STR)
@@ -34,6 +34,7 @@ bool UPDATE_FLAG        = false;
 bool CONFIG_FLAG        = false;
 bool RESET_FLAG         = false;
 bool TEST_FLAG          = false;
+bool PIRsensor_FLAG     = false;
 
 const int esp_wake    = 4;           //Reset and EN => To ESP
 const int esp_motion  = 5;         // Motion detected 
@@ -59,7 +60,7 @@ volatile int wtd_delay = 0;     // Delay with WDT
  *  POR Wake UP
  *************************************************************************************/
 void wakeUpNow(){                 // Interrupt service routine or ISR  
-  PIRsensorState = !lastPIRsensorState;    // we negate previous state and assign to current state
+  PIRsensor_FLAG = true;    // we negate previous state and assign to current state
 }
 /*************************************************************************************
  *  Change in PCINT for the buttons
@@ -98,7 +99,8 @@ ISR(WDT_vect) {
 
 void Hibernate()         // here arduino is put to sleep/hibernation
 {
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);  
+  // set_sleep_mode(SLEEP_MODE_PWR_DOWN);  
+  set_sleep_mode(SLEEP_MODE_PWR_SAVE);  
   // ADCSRA &= ~(1 << 7);   // Disable ADC - don't forget to flip back after waking up if you need ADC in your application ADCSRA |= (1 << 7);  (From Kevin's sketch)
 
   sleep_enable();                       // enable the sleep mode function
@@ -215,6 +217,7 @@ void setup() {
     delay(100);
     Serial.println();
     Serial.println("Author:: Mahmoud Shokry");
+    buzzing(2,200,200);
   #endif
   // Disable all Not needed 
   power_adc_disable();
@@ -238,8 +241,9 @@ void setup() {
 
 void loop() {
 interrupts();    // enable interrupts for Due and Nano V3
-
-if ((PIRsensorState != lastPIRsensorState and not alarm) or TEST_FLAG){
+PRINTDEBUGLN("Awake");
+PIRsensorState= digitalRead(PIRsensor);
+if ((PIRsensor_FLAG and not alarm) or TEST_FLAG){
   if (PIRsensorState == 1 or TEST_FLAG) { //Activate Process on High pulse of motion
     #if (DEBUG==1)
       digitalWrite(LedPin, HIGH);         // Indicator for testing
@@ -283,8 +287,11 @@ if ((PIRsensorState != lastPIRsensorState and not alarm) or TEST_FLAG){
 digitalWrite(esp_wake, LOW);
 digitalWrite(esp_motion, LOW);     // motion flag high
 digitalWrite(esp_update, LOW);
-lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
+// lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
+PIRsensor_FLAG = false;
 TEST_FLAG = false;
+}else {
+  PIRsensor_FLAG = false;
 }
 if(UPDATE_FLAG){
   digitalWrite(esp_update, HIGH);     // motion flag high
@@ -342,11 +349,16 @@ if(CONFIG_FLAG){
 }
 if(RESET_FLAG){
  PRINTDEBUGLN("Soft Reset");            // enable for debugging
+ // lastPIRsensorState = PIRsensorState;    // reset lastinterrupt state
+ PIRsensor_FLAG = false;
+ delay(300);
  alarm = false;
  RESET_FLAG = false;
 }
 digitalWrite(LedPin, LOW);
 digitalWrite(esp_wake, LOW);       // Ready wake the esp 
+delay(10);
+PRINTDEBUG("Sleeping-");            // enable for debugging
 delay(10);
 Hibernate();   // go to sleep - calling sleeping function
 }
